@@ -18,7 +18,7 @@ public class StateRequest {
     @Size(min = 2, max = 2)
     private final String abbreviation;
 
-    public State convert() {
+    public State toEntity() {
         State state = new State();
 
         state.setName(name);

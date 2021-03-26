@@ -1,5 +1,7 @@
 package com.eugeniojava.covid19vaccination.service.impl;
 
+import com.eugeniojava.covid19vaccination.controller.request.VaccineRequest;
+import com.eugeniojava.covid19vaccination.controller.response.VaccineResponse;
 import com.eugeniojava.covid19vaccination.model.Vaccine;
 import com.eugeniojava.covid19vaccination.repository.VaccineRepository;
 import com.eugeniojava.covid19vaccination.service.VaccineService;
@@ -19,41 +21,48 @@ public class VaccineServiceImpl implements VaccineService {
     }
 
     @Override
-    public ResponseEntity<List<Vaccine>> getAll() {
+    public ResponseEntity<List<VaccineResponse>> getAll() {
         List<Vaccine> vaccines = vaccineRepository.findAll();
 
         if (!vaccines.isEmpty()) {
-            return new ResponseEntity<>(vaccines, HttpStatus.OK);
+            return new ResponseEntity<>(VaccineResponse.convert(vaccines),
+                    HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<Vaccine> getById(Long id) {
+    public ResponseEntity<VaccineResponse> getById(Long id) {
         Vaccine vaccine = vaccineRepository.findById(id).orElse(null);
 
         if (vaccine != null) {
-            return new ResponseEntity<>(vaccine, HttpStatus.OK);
+            return new ResponseEntity<>(new VaccineResponse(vaccine),
+                    HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
-    public ResponseEntity<Vaccine> create(Vaccine vaccine) {
-        return new ResponseEntity<>(vaccineRepository.save(vaccine),
-                HttpStatus.CREATED);
+    public ResponseEntity<VaccineResponse> create(
+            VaccineRequest vaccineRequest) {
+        return new ResponseEntity<>(
+                new VaccineResponse(vaccineRepository.save(
+                        vaccineRequest.toEntity())), HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<Vaccine> update(Long id, Vaccine vaccine) {
+    public ResponseEntity<VaccineResponse> update(
+            Long id, VaccineRequest vaccineRequest) {
         Vaccine existingVaccine =
                 vaccineRepository.findById(id).orElse(null);
 
         if (existingVaccine != null) {
-            existingVaccine.setName(vaccine.getName());
-            existingVaccine.setOrigin(vaccine.getOrigin());
+            existingVaccine.setName(vaccineRequest.getName());
+            existingVaccine.setOrigin(vaccineRequest.getOrigin());
 
-            return new ResponseEntity<>(vaccineRepository.save(existingVaccine),
+            return new ResponseEntity<>(
+                    new VaccineResponse(
+                            vaccineRepository.save(existingVaccine)),
                     HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

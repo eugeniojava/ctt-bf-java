@@ -1,16 +1,19 @@
 package com.eugeniojava.covid19vaccination.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name = "vaccine_table")
 public class Vaccine {
 
@@ -26,4 +29,7 @@ public class Vaccine {
     @NotBlank
     @Column(name = "vaccine_origin")
     private String origin;
+
+    @OneToMany(mappedBy = "vaccine")
+    private List<Report> reports;
 }

@@ -1,8 +1,7 @@
 package com.eugeniojava.covid19vaccination.controller;
 
-import com.eugeniojava.covid19vaccination.controller.request.CityRequest;
-import com.eugeniojava.covid19vaccination.controller.response.CityResponse;
-import com.eugeniojava.covid19vaccination.model.Vaccine;
+import com.eugeniojava.covid19vaccination.controller.request.VaccineRequest;
+import com.eugeniojava.covid19vaccination.controller.response.VaccineResponse;
 import com.eugeniojava.covid19vaccination.service.VaccineService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,24 +20,26 @@ public class VaccineController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Vaccine>> getAll() {
+    public ResponseEntity<List<VaccineResponse>> getAll() {
         return vaccineService.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Vaccine> getById(@PathVariable Long id) {
+    public ResponseEntity<VaccineResponse> getById(@PathVariable Long id) {
         return vaccineService.getById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Vaccine> create(@Valid @RequestBody Vaccine vaccine) {
-        return vaccineService.create(vaccine);
+    public ResponseEntity<VaccineResponse> create(
+            @Valid @RequestBody VaccineRequest vaccineRequest) {
+        return vaccineService.create(vaccineRequest);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vaccine> update(@PathVariable Long id,
-                                          @Valid @RequestBody Vaccine Vaccine) {
-        return vaccineService.update(id, Vaccine);
+    public ResponseEntity<VaccineResponse> update(
+            @PathVariable Long id,
+            @Valid @RequestBody VaccineRequest vaccineRequest) {
+        return vaccineService.update(id, vaccineRequest);
     }
 
     @DeleteMapping("/{id}")

@@ -1,16 +1,19 @@
 package com.eugeniojava.covid19vaccination.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Table(name = "city_table")
 public class City {
 
@@ -26,6 +29,10 @@ public class City {
     @ManyToOne
     @JoinColumn(name = "state_id")
     private State state;
+
+    @OneToMany(mappedBy = "city")
+    @Column(name = "reports")
+    private List<Report> reports;
 
     public City(@NotBlank String name, State state) {
         this.name = name;

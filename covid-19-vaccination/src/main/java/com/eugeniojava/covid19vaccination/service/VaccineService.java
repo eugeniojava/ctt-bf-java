@@ -1,19 +1,21 @@
 package com.eugeniojava.covid19vaccination.service;
 
-import com.eugeniojava.covid19vaccination.model.Vaccine;
+import com.eugeniojava.covid19vaccination.controller.request.VaccineRequest;
+import com.eugeniojava.covid19vaccination.controller.response.VaccineResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface VaccineService {
 
-    ResponseEntity<List<Vaccine>> getAll();
+    ResponseEntity<List<VaccineResponse>> getAll();
 
-    ResponseEntity<Vaccine> getById(Long id);
+    ResponseEntity<VaccineResponse> getById(Long id);
 
-    ResponseEntity<Vaccine> create(Vaccine Vaccine);
+    ResponseEntity<VaccineResponse> create(VaccineRequest vaccineRequest);
 
-    ResponseEntity<Vaccine> update(Long id, Vaccine Vaccine);
+    ResponseEntity<VaccineResponse> update(Long id,
+                                           VaccineRequest vaccineRequest);
 
     ResponseEntity<?> delete(Long id);
 }

@@ -47,7 +47,7 @@ public class StateServiceImpl implements StateService {
         if (!stateRepository
                 .findByAbbreviation(stateRequest.getAbbreviation())
                 .isPresent()) {
-            State state = stateRepository.save(stateRequest.convert());
+            State state = stateRepository.save(stateRequest.toEntity());
 
             return new ResponseEntity<>(new StateResponse(state),
                     HttpStatus.CREATED);
