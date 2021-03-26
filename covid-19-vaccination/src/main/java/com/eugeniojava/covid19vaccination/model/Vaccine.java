@@ -1,5 +1,6 @@
 package com.eugeniojava.covid19vaccination.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Vaccine {
     @Column(name = "vaccine_origin")
     private String origin;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "vaccine")
     private List<Report> reports;
 }

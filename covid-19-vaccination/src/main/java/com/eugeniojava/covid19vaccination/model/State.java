@@ -1,5 +1,6 @@
 package com.eugeniojava.covid19vaccination.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ public class State {
     @Column(name = "state_abbreviation", length = 2)
     private String abbreviation;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "state")
     @Column(name = "cities")
     private List<City> cities;
