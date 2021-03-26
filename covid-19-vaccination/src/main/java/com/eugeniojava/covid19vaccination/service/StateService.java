@@ -14,7 +14,8 @@ public interface StateService {
 
     ResponseEntity<StateResponse> create(StateRequest stateRequest);
 
-    ResponseEntity<StateResponse> update(Long id, StateRequest stateRequest);
+    ResponseEntity<StateResponse> update(Long id,
+                                         StateRequest stateRequest);
 
     ResponseEntity<?> delete(Long id);
 }

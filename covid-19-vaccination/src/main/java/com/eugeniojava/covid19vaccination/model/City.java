@@ -26,4 +26,9 @@ public class City {
     @ManyToOne
     @JoinColumn(name = "state_id")
     private State state;
+
+    public City(@NotBlank String name, State state) {
+        this.name = name;
+        this.state = state;
+    }
 }

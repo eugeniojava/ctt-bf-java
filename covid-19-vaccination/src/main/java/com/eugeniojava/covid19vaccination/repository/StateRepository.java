@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface StateRepository extends JpaRepository<State, Long> {
 
     Optional<State> findByAbbreviation(String abbreviation);
+
+    Optional<State> findByName(String name);
 }
