@@ -95,6 +95,8 @@ public class CityServiceImpl implements CityService {
     public ResponseEntity<?> delete(Long id) {
         if (cityRepository.findById(id).isPresent()) {
             cityRepository.deleteById(id);
+
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
