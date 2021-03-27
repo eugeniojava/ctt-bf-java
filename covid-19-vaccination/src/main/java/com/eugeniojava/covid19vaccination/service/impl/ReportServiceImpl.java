@@ -2,19 +2,23 @@ package com.eugeniojava.covid19vaccination.service.impl;
 
 import com.eugeniojava.covid19vaccination.controller.request.ReportRequest;
 import com.eugeniojava.covid19vaccination.controller.response.ReportResponse;
-import com.eugeniojava.covid19vaccination.controller.response.VaccinatedPeopleResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByCityResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByStateResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccineTypeResponse;
 import com.eugeniojava.covid19vaccination.model.City;
 import com.eugeniojava.covid19vaccination.model.Report;
 import com.eugeniojava.covid19vaccination.model.Vaccine;
 import com.eugeniojava.covid19vaccination.repository.CityRepository;
 import com.eugeniojava.covid19vaccination.repository.ReportRepository;
 import com.eugeniojava.covid19vaccination.repository.VaccineRepository;
+import com.eugeniojava.covid19vaccination.repository.result.TotalVaccineTypeResult;
 import com.eugeniojava.covid19vaccination.service.ReportService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -111,21 +115,69 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<VaccinatedPeopleResponse>
-    getVaccinatedPeopleByCityAndDateBetween(String cityName,
-                                            LocalDate startDate,
-                                            LocalDate endDate) {
-        Integer totalVaccinatedPeople =
+    public ResponseEntity<VaccinatedByCityResponse>
+    getTotalVaccinatedByCityBetween(String cityName,
+                                    LocalDate startDate,
+                                    LocalDate endDate) {
+        Long totalVaccinated =
                 reportRepository
-                        .getVaccinatedPeopleByCityAndDateBetween(cityName,
+                        .getTotalVaccinatedByCityBetween(cityName,
                                 startDate, endDate);
 
-        if (totalVaccinatedPeople == null) {
-            totalVaccinatedPeople = 0;
+        if (totalVaccinated == null) {
+            totalVaccinated = 0L;
         }
-        VaccinatedPeopleResponse vaccinatedPeopleResponse = new VaccinatedPeopleResponse(cityName,
-                totalVaccinatedPeople, startDate, endDate);
+        VaccinatedByCityResponse vaccinatedByCityResponse =
+                new VaccinatedByCityResponse(totalVaccinated,
+                        cityName,
+                        startDate,
+                        endDate);
 
-        return new ResponseEntity<>(vaccinatedPeopleResponse, HttpStatus.OK);
+        return new ResponseEntity<>(vaccinatedByCityResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<VaccinatedByStateResponse>
+    getTotalVaccinatedByStateBetween(String stateName,
+                                     LocalDate startDate,
+                                     LocalDate endDate) {
+        Long totalVaccinated =
+                reportRepository
+                        .getTotalVaccinatedByStateBetween(stateName,
+                                startDate, endDate);
+
+        if (totalVaccinated == null) {
+            totalVaccinated = 0L;
+        }
+        VaccinatedByStateResponse vaccinatedByStateResponse =
+                new VaccinatedByStateResponse(totalVaccinated, stateName,
+                        startDate, endDate);
+
+        return new ResponseEntity<>(vaccinatedByStateResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<VaccineTypeResponse>>
+    getTotalEachVaccineTypeByPeriod(
+            LocalDate startDate,
+            LocalDate endDate) {
+        List<TotalVaccineTypeResult> totalVaccineTypeResults =
+                reportRepository.getTotalEachVaccineTypeByPeriod(startDate,
+                        endDate);
+        List<VaccineTypeResponse> vaccineTypeResponses = new ArrayList<>();
+
+        totalVaccineTypeResults.forEach(result -> {
+            VaccineTypeResponse vaccineTypeResponse =
+                    new VaccineTypeResponse(
+                            result.getId(),
+                            result.getVaccine(),
+                            result.getTotal(),
+                            startDate,
+                            endDate);
+
+            vaccineTypeResponses.add(vaccineTypeResponse);
+        });
+
+        return new ResponseEntity<>(vaccineTypeResponses, HttpStatus.OK);
     }
 }

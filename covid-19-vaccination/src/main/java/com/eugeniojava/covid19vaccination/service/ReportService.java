@@ -2,7 +2,9 @@ package com.eugeniojava.covid19vaccination.service;
 
 import com.eugeniojava.covid19vaccination.controller.request.ReportRequest;
 import com.eugeniojava.covid19vaccination.controller.response.ReportResponse;
-import com.eugeniojava.covid19vaccination.controller.response.VaccinatedPeopleResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByCityResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByStateResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccineTypeResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -21,6 +23,15 @@ public interface ReportService {
 
     ResponseEntity<?> delete(Long id);
 
-    ResponseEntity<VaccinatedPeopleResponse> getVaccinatedPeopleByCityAndDateBetween(
-            String cityName, LocalDate startDate, LocalDate endDate);
+    ResponseEntity<VaccinatedByCityResponse>
+    getTotalVaccinatedByCityBetween(String cityName, LocalDate startDate,
+                                    LocalDate endDate);
+
+    ResponseEntity<VaccinatedByStateResponse>
+    getTotalVaccinatedByStateBetween(String stateName, LocalDate startDate,
+                                     LocalDate endDate);
+
+    ResponseEntity<List<VaccineTypeResponse>> getTotalEachVaccineTypeByPeriod(
+            LocalDate startDate,
+            LocalDate endDate);
 }

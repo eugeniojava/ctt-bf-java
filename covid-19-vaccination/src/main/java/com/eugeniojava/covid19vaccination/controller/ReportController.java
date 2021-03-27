@@ -2,7 +2,9 @@ package com.eugeniojava.covid19vaccination.controller;
 
 import com.eugeniojava.covid19vaccination.controller.request.ReportRequest;
 import com.eugeniojava.covid19vaccination.controller.response.ReportResponse;
-import com.eugeniojava.covid19vaccination.controller.response.VaccinatedPeopleResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByCityResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByStateResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccineTypeResponse;
 import com.eugeniojava.covid19vaccination.repository.ReportRepository;
 import com.eugeniojava.covid19vaccination.service.ReportService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -55,15 +57,38 @@ public class ReportController {
         return reportService.delete(id);
     }
 
-    @GetMapping("/vaccinatedPeople")
-    public ResponseEntity<VaccinatedPeopleResponse>
-    getVaccinatedPeopleByCityAndDateBetween(
+    @GetMapping("/totalVaccinatedByCity")
+    public ResponseEntity<VaccinatedByCityResponse>
+    getTotalVaccinatedByCityBetween(
             @RequestParam String cityName,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
                     LocalDate startDate,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
                     LocalDate endDate) {
-        return reportService.getVaccinatedPeopleByCityAndDateBetween(
+        return reportService.getTotalVaccinatedByCityBetween(
                 cityName, startDate, endDate);
+    }
+
+    @GetMapping("/totalVaccinatedByState")
+    public ResponseEntity<VaccinatedByStateResponse>
+    getTotalVaccinatedByStateBetween(
+            @RequestParam String stateName,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate endDate) {
+        return reportService.getTotalVaccinatedByStateBetween(
+                stateName, startDate, endDate);
+    }
+
+    @GetMapping("/totalVaccineType")
+    public ResponseEntity<List<VaccineTypeResponse>>
+    getTotalEachVaccineTypeByPeriod(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate endDate) {
+        return reportService.getTotalEachVaccineTypeByPeriod(startDate,
+                endDate);
     }
 }
