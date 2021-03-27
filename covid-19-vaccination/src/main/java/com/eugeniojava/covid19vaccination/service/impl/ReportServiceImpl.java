@@ -2,6 +2,7 @@ package com.eugeniojava.covid19vaccination.service.impl;
 
 import com.eugeniojava.covid19vaccination.controller.request.ReportRequest;
 import com.eugeniojava.covid19vaccination.controller.response.ReportResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedPeopleResponse;
 import com.eugeniojava.covid19vaccination.model.City;
 import com.eugeniojava.covid19vaccination.model.Report;
 import com.eugeniojava.covid19vaccination.model.Vaccine;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -106,5 +108,24 @@ public class ReportServiceImpl implements ReportService {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<VaccinatedPeopleResponse>
+    getVaccinatedPeopleByCityAndDateBetween(String cityName,
+                                            LocalDate startDate,
+                                            LocalDate endDate) {
+        Integer totalVaccinatedPeople =
+                reportRepository
+                        .getVaccinatedPeopleByCityAndDateBetween(cityName,
+                                startDate, endDate);
+
+        if (totalVaccinatedPeople == null) {
+            totalVaccinatedPeople = 0;
+        }
+        VaccinatedPeopleResponse vaccinatedPeopleResponse = new VaccinatedPeopleResponse(cityName,
+                totalVaccinatedPeople, startDate, endDate);
+
+        return new ResponseEntity<>(vaccinatedPeopleResponse, HttpStatus.OK);
     }
 }

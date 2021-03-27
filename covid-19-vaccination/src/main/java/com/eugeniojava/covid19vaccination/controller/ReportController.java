@@ -2,11 +2,10 @@ package com.eugeniojava.covid19vaccination.controller;
 
 import com.eugeniojava.covid19vaccination.controller.request.ReportRequest;
 import com.eugeniojava.covid19vaccination.controller.response.ReportResponse;
-import com.eugeniojava.covid19vaccination.controller.response.VaccinatedPeople;
-import com.eugeniojava.covid19vaccination.model.Report;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedPeopleResponse;
 import com.eugeniojava.covid19vaccination.repository.ReportRepository;
 import com.eugeniojava.covid19vaccination.service.ReportService;
-import org.springframework.http.HttpStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,24 +56,14 @@ public class ReportController {
     }
 
     @GetMapping("/vaccinatedPeople")
-    public ResponseEntity<VaccinatedPeople> getVaccinatedPeople(
+    public ResponseEntity<VaccinatedPeopleResponse>
+    getVaccinatedPeopleByCityAndDateBetween(
             @RequestParam String cityName,
-            @RequestParam String startDate,
-            @RequestParam String endDate) {
-        LocalDate startLocalDate = LocalDate.parse(startDate);
-        LocalDate endLocalDate = LocalDate.parse(endDate);
-        List<Report> reports = reportRepository
-                .findAllByCity_NameAndDateBetween(
-                        cityName,
-                        startLocalDate,
-                        endLocalDate);
-        Integer numberOfPeople = 0;
-
-        for (Report report : reports) {
-            numberOfPeople += report.getTotal();
-        }
-
-        return new ResponseEntity<>(new VaccinatedPeople(cityName,
-                numberOfPeople, startLocalDate, endLocalDate), HttpStatus.OK);
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate endDate) {
+        return reportService.getVaccinatedPeopleByCityAndDateBetween(
+                cityName, startDate, endDate);
     }
 }
