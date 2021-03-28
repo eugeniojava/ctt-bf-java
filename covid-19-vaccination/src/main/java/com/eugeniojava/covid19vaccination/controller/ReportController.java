@@ -4,7 +4,7 @@ import com.eugeniojava.covid19vaccination.controller.request.ReportRequest;
 import com.eugeniojava.covid19vaccination.controller.response.ReportResponse;
 import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByCityResponse;
 import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByStateResponse;
-import com.eugeniojava.covid19vaccination.controller.response.VaccineTypeResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByVaccineResponse;
 import com.eugeniojava.covid19vaccination.repository.ReportRepository;
 import com.eugeniojava.covid19vaccination.service.ReportService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -81,14 +81,14 @@ public class ReportController {
                 stateName, startDate, endDate);
     }
 
-    @GetMapping("/totalVaccineType")
-    public ResponseEntity<List<VaccineTypeResponse>>
-    getTotalEachVaccineTypeByPeriod(
+    @GetMapping("/totalVaccinatedByVaccine")
+    public ResponseEntity<List<VaccinatedByVaccineResponse>>
+    getTotalVaccinatedByVaccineBetween(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
                     LocalDate startDate,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")
                     LocalDate endDate) {
-        return reportService.getTotalEachVaccineTypeByPeriod(startDate,
+        return reportService.getTotalVaccinatedByVaccineBetween(startDate,
                 endDate);
     }
 }

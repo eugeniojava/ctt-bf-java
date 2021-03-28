@@ -4,7 +4,7 @@ import com.eugeniojava.covid19vaccination.controller.request.ReportRequest;
 import com.eugeniojava.covid19vaccination.controller.response.ReportResponse;
 import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByCityResponse;
 import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByStateResponse;
-import com.eugeniojava.covid19vaccination.controller.response.VaccineTypeResponse;
+import com.eugeniojava.covid19vaccination.controller.response.VaccinatedByVaccineResponse;
 import com.eugeniojava.covid19vaccination.model.City;
 import com.eugeniojava.covid19vaccination.model.Report;
 import com.eugeniojava.covid19vaccination.model.Vaccine;
@@ -157,27 +157,28 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<List<VaccineTypeResponse>>
-    getTotalEachVaccineTypeByPeriod(
+    public ResponseEntity<List<VaccinatedByVaccineResponse>>
+    getTotalVaccinatedByVaccineBetween(
             LocalDate startDate,
             LocalDate endDate) {
         List<TotalVaccineTypeResult> totalVaccineTypeResults =
-                reportRepository.getTotalEachVaccineTypeByPeriod(startDate,
+                reportRepository.getTotalVaccinatedByVaccineBetween(startDate,
                         endDate);
-        List<VaccineTypeResponse> vaccineTypeResponses = new ArrayList<>();
+        List<VaccinatedByVaccineResponse> vaccinatedByVaccineRespons =
+                new ArrayList<>();
 
         totalVaccineTypeResults.forEach(result -> {
-            VaccineTypeResponse vaccineTypeResponse =
-                    new VaccineTypeResponse(
+            VaccinatedByVaccineResponse vaccinatedByVaccineResponse =
+                    new VaccinatedByVaccineResponse(
                             result.getId(),
                             result.getVaccine(),
                             result.getTotal(),
                             startDate,
                             endDate);
 
-            vaccineTypeResponses.add(vaccineTypeResponse);
+            vaccinatedByVaccineRespons.add(vaccinatedByVaccineResponse);
         });
 
-        return new ResponseEntity<>(vaccineTypeResponses, HttpStatus.OK);
+        return new ResponseEntity<>(vaccinatedByVaccineRespons, HttpStatus.OK);
     }
 }
